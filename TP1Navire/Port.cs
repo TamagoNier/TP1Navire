@@ -14,14 +14,17 @@ namespace TP1Navire
         {
             this.nom = nom;
             this.nbNaviresMax = 5;
+            this.navires = new List<Navire>();
+
         }
 
         public string Nom { get => nom; }
         public int NbNaviresMax { get => nbNaviresMax; set => nbNaviresMax = value; }
+        internal List<Navire> Navires { get => navires; set => navires = value; }
 
         public void EnregistrerArrive(Navire navire)
         {
-            if(this.navires.Count == this.NbNaviresMax)
+            if (this.navires.Count == this.NbNaviresMax)
             {
                 throw new Exception("Ajout Impossible, le port est complet");
             }
@@ -35,20 +38,26 @@ namespace TP1Navire
         {
             if (this.EstPresent(imo))
             {
-                this.navires.RemoveAt(RecupPosition(imo));
+                for (int i = 0; i > this.navires.Count - 1; i++)
+                {
+                    if (this.navires[i].Imo == imo)
+                    {
+                        this.navires.RemoveAt(i);
+                    }
+                }
             }
             else
             {
                 throw new Exception("Le navire n'est pas present dans le port");
             }
-            
+
         }
 
         public bool EstPresent(string imo)
         {
-            for(int i = 0; i > this.navires.Count; i++)
+            foreach (Navire navire in this.navires)
             {
-                if(this.navires[i].Imo == imo)
+                if (navire.Imo == imo)
                 {
                     return true;
                 }
@@ -56,28 +65,27 @@ namespace TP1Navire
             return false;
         }
 
-        private int RecupPosition(string imo)
-        {
-            if (this.EstPresent(imo))
-            {
-                for (int i = 0; i > this.navires.Count - 1; i++)
-                {
-                    if (this.navires[i].Imo == imo)
-                    {
-                        int retour = i;
-                        return retour;
-                    }
-                }
-            }
-            else
-            {
-                return -1;
-            }
-        }
+        //private int RecupPosition(string imo)
+        //{
+        //    if (this.EstPresent(imo))
+        //    {
+        //        for (int i = 0; i > this.navires.Count - 1; i++)
+        //        {
+        //            if (this.navires[i].Imo == imo)
+        //            {
+        //                return i;
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return -1;
+        //    }
+        //}
 
         private int RecupPosition(Navire navire)
         {
-            if (this.navires.Contains(navire)){
+            if (this.navires.Contains(navire)) {
                 int retour = this.navires.BinarySearch(navire);
                 return retour;
             }
@@ -86,5 +94,24 @@ namespace TP1Navire
                 return -1;
             }
         }
+
+        public void TesteRecupPositV2()
+        {
+            Navire depardieux = new Navire("IMO1564879", "SS Depardieux");
+            Navire astier = new Navire("IMO1564880", "SS Astier");
+            Navire chabat = new Navire("IMO1564881", "SS Chabat");
+            Navire darmon = new Navire("IMO1564882", "SS Darmon");
+
+            this.EnregistrerArrive(depardieux);
+            this.EnregistrerArrive(astier);
+            this.EnregistrerArrive(chabat);
+            this.EnregistrerArrive(darmon);
+
+            Console.WriteLine("Indice du SS Astier (" + astier.Imo +") : " + this. RecupPosition(astier));
+            Console.WriteLine("Indice du SS Darmon (" + depardieux.Imo + ") : " + this.RecupPosition(depardieux));
+        }
     }
 }
+
+
+
