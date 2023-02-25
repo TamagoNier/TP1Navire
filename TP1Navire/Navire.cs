@@ -8,15 +8,14 @@ namespace TP1Navire
     {
         private string imo;
         private string nom;
-        private string libelleFret;
-        private int qteFretMaxi;
+        private string libelleFret = "Indefini";
+        private int qteFretMaxi = 0;
 
         public Navire(string imo, string nom)
         {
             this.imo = imo;
             this.nom = nom;
-            this.libelleFret = "Indefini";
-            this.qteFretMaxi = 0;
+
         }
 
         public Navire(string imo, string nom, string libelleFret, int qteFretMaxi)
