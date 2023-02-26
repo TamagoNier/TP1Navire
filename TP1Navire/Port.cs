@@ -36,21 +36,19 @@ namespace TP1Navire
 
         public void EnregistrerDepart(string imo)
         {
-            if (this.EstPresent(imo))
+            if (EstPresent(imo))
             {
-                for (int i = 0; i > this.navires.Count - 1; i++)
+                int indice = RecupPosition(imo);
+                if (indice != -1)
                 {
-                    if (this.navires[i].Imo == imo)
-                    {
-                        this.navires.RemoveAt(i);
-                    }
+                    this.navires.RemoveAt(indice);
                 }
-            }
-            else
-            {
-                throw new Exception("Le navire n'est pas present dans le port");
-            }
+                else
+                {
+                    throw new Exception("Le port ne contient pas de bateau comportant cet IMO");
+                }
 
+            }
         }
 
         public bool EstPresent(string imo)
@@ -65,34 +63,43 @@ namespace TP1Navire
             return false;
         }
 
-        //private int RecupPosition(string imo)
-        //{
-        //    if (this.EstPresent(imo))
-        //    {
-        //        for (int i = 0; i > this.navires.Count - 1; i++)
-        //        {
-        //            if (this.navires[i].Imo == imo)
-        //            {
-        //                return i;
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return -1;
-        //    }
-        //}
-
-        private int RecupPosition(Navire navire)
+        public int RecupPosition(string imo)
         {
-            if (this.navires.Contains(navire)) {
-                int retour = this.navires.BinarySearch(navire);
-                return retour;
+            for (int i = 0; i < this.navires.Count; i++)
+            {
+                if (this.navires[i].Imo == imo)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public int RecupPosition(Navire navire)
+        {
+            if (this.navires.Contains(navire))
+            {
+                return this.navires.IndexOf(navire);
             }
             else
             {
                 return -1;
             }
+        }
+        public void TestRecupPosition()
+        {
+            Navire test1 = new Navire("IMO1564879", "SS Test1");
+            Navire test2 = new Navire("IMO1564880", "SS Test2");
+            Navire test3 = new Navire("IMO1564881", "SS Test3");
+            Navire test4 = new Navire("IMO1564882", "SS Test4");
+
+            this.EnregistrerArrive(test1);
+            this.EnregistrerArrive(test2);
+            this.EnregistrerArrive(test3);
+
+            Console.WriteLine("Indice du SS Test1 (" + test1.Imo + ") : " + this.RecupPosition(test1.Imo));
+            Console.WriteLine("Indice du SS Test2 (" + test3.Imo + ") : " + this.RecupPosition(test3.Imo));
+            Console.WriteLine("Indice du SS Test4 (" + test4.Imo + ") : " + this.RecupPosition(test4.Imo));
         }
 
         public void TesteRecupPositV2()
